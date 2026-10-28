@@ -1,32 +1,46 @@
 <h2>Milestone Tracker</h2>
 
-<form [formGroup]="milestoneForm">
-  <div>
-    <label for="milestone-name">Milestone Name:</label>
-    <input id="milestone-name" type="text" formControlName="milestoneName">
-  </div>
+<h3>Milestones from Express</h3>
 
-  <div>
-    <label for="due-date">Due Date:</label>
-    <input id="due-date" type="date" formControlName="dueDate">
-  </div>
+<ul>
+  @for (milestone of milestones(); track $index) {
+    <li>
+      {{ milestone.milestoneName }} - {{ milestone.status }}
+    </li>
+  }
+</ul>
 
-  <div>
-    <label for="status">Status:</label>
-    <input id="status" type="text" formControlName="status">
-  </div>
+<p>{{ loadError() }}</p>
 
-  <div formGroupName="details">
-    <h3>Responsibility Details</h3>
+<h3>Add a Milestone</h3>
 
-    <div>
-      <label for="owner">Owner:</label>
-      <input id="owner" type="text" formControlName="owner">
-    </div>
+<form [formGroup]="milestoneForm" (ngSubmit)="onSubmit()">
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Milestone Name</mat-label>
+      <input matInput formControlName="milestoneName">
+    </mat-form-field>
+  </p>
 
-    <div>
-      <label for="notes">Notes:</label>
-      <input id="notes" type="text" formControlName="notes">
-    </div>
-  </div>
+  <p>
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="Not Started">Not Started</mat-option>
+        <mat-option value="In Progress">In Progress</mat-option>
+        <mat-option value="Completed">Completed</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </p>
+
+  <button
+    mat-flat-button
+    type="submit"
+    [disabled]="milestoneForm.invalid || submitting()"
+  >
+    Submit Milestone
+  </button>
 </form>
+
+<p>{{ successMessage() }}</p>
+<p>{{ submitError() }}</p>
